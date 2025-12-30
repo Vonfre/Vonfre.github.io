@@ -1,0 +1,101 @@
+---
+layout: default
+---
+
+<article class="post-container">
+    <div class="container">
+        <!-- Post Header -->
+        <header class="post-header hero"
+            style="min-height: 40vh; padding-top: 120px; text-align: center; display:block;">
+            <div class="glass-panel" style="padding: 3rem; display: inline-block; width: 100%; max-width: 900px;">
+                <h1 class="post-title gradient-text" style="font-size: 3rem; margin-bottom: 1rem;">{{ page.title }}</h1>
+                <p class="post-meta" style="color: var(--text-muted); font-size: 1.1rem;">
+                    <i class="far fa-calendar-alt"></i> {{ page.date | date: "%B %-d, %Y" }}
+                    {% if page.author %} • <i class="far fa-user"></i> {{ page.author }}{% endif %}
+                </p>
+            </div>
+        </header>
+
+        <!-- Post Content -->
+        <div class="post-content glass-panel"
+            style="padding: 4rem; margin-top: -2rem; position: relative; z-index: 10; font-size: 1.15rem;">
+            {{ content }}
+        </div>
+    </div>
+</article>
+
+<style>
+    /* Blog Typography Overrides */
+    .post-content {
+        line-height: 1.8;
+    }
+
+    .post-content h2 {
+        font-family: var(--font-heading);
+        color: var(--primary);
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+    }
+
+    .post-content h3 {
+        font-family: var(--font-heading);
+        color: var(--text-main);
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .post-content p {
+        margin-bottom: 1.5rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .post-content code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-family: 'Consolas', monospace;
+        color: var(--secondary);
+    }
+
+    .post-content pre {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 1.5rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin-bottom: 2rem;
+        border: 1px solid var(--glass-border);
+    }
+
+    .post-content pre code {
+        background: transparent;
+        padding: 0;
+        color: #eee;
+    }
+
+    .post-content ul,
+    .post-content ol {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .post-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .post-content blockquote {
+        border-left: 4px solid var(--primary);
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        font-style: italic;
+        color: var(--text-muted);
+    }
+
+    .post-content img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin: 2rem 0;
+        box-shadow: var(--glass-shadow);
+    }
+</style>

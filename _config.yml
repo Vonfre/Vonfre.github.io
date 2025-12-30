@@ -1,0 +1,26 @@
+title: Vonfre | BioInfo Blog
+description: High-End Bioinformatics Research & Tech Blog
+url: "https://Vonfre.github.io"
+baseurl: ""
+
+# Build Settings
+markdown: kramdown
+theme: null
+
+# Syntax Highlighting
+highlighter: rouge
+
+# Permalinks
+permalink: /:year/:month/:day/:title/
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# MathJax (Custom Config)
+mathjax: true
+
+exclude:
+  - Gemfile
+  - Gemfile.lock

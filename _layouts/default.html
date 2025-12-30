@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }} | {{ site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ " /assets/css/style.css" | relative_url }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    {% if site.mathjax %}
+    {% include mathjax.html %}
+    {% endif %}
+</head>
+
+<body>
+
+    <!-- Background Canvas for Particles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Custom Cursor Glow -->
+    <div class="cursor-glow"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-wrapper">
+            <a href="{{ " /" | relative_url }}" class="logo">Bio<span style="color:var(--primary)">Info</span>.</a>
+            <ul class="nav-links">
+                <li><a href="{{ " /" | relative_url }}" class="nav-link">Home</a></li>
+                <!-- <li><a href="#about" class="nav-link">About</a></li> -->
+                <li><a href="https://github.com/Vonfre" target="_blank" class="nav-link"><i
+                            class="fab fa-github"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main>
+        {{ content }}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <h2 style="font-family: var(--font-heading); margin-bottom: 2rem;">Science meets <span
+                    class="gradient-text">Art</span>.</h2>
+            <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; font-size: 1.5rem;">
+                <a href="#" class="nav-link"><i class="fab fa-github"></i></a>
+                <a href="#" class="nav-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="nav-link"><i class="fab fa-linkedin"></i></a>
+                <a href="mailto:contact@vonfre.com" class="nav-link"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p>&copy; 2025 Vonfre. Built with Jekyll & LaTeX.</p>
+        </div>
+    </footer>
+
+    <!-- Main JS -->
+    <script src="{{ " /js/main.js" | relative_url }}"></script>
+</body>
+
+</html>
