@@ -1,124 +1,170 @@
 # 我的技术博客
 
-一个现代化、响应式的静态博客网站，托管在 GitHub Pages 上。
+一个现代化的侧边栏布局博客系统，支持 Markdown 和 LaTeX，托管在 GitHub Pages 上。
 
 ## ✨ 特性
 
-- 🎨 **现代化设计**: 使用渐变色、玻璃态效果和流畅动画
-- 🌓 **深色模式**: 支持浅色/深色主题切换
+- 📝 **Markdown 支持**: 直接写 `.md` 文件，自动渲染
+- 🧮 **LaTeX 数学公式**: 支持行内和块级公式
+- 💻 **代码高亮**: 自动语法高亮
+- 🌓 **深色模式**: 浅色/深色主题切换
 - 📱 **完全响应式**: 适配桌面、平板和移动设备
-- 🔍 **搜索和筛选**: 快速查找感兴趣的文章
-- 📝 **分类管理**: 按技术、生物信息学、教程等分类
-- ⚡ **零构建工具**: 纯 HTML/CSS/JavaScript，无需编译
+- �️ **模块化组织**: 基础学习、代码复现、实用工具、文献精读
+- ⚡ **零构建工具**: 纯 HTML/CSS/JavaScript
 
 ## 🚀 快速开始
 
 ### 本地预览
 
-1. 克隆仓库到本地：
 ```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-```
+# 克隆仓库
+git clone https://github.com/Vonfre/Vonfre.github.io.git
+cd Vonfre.github.io
 
-2. 启动本地服务器：
-```bash
-# 使用 Python 3
+# 启动本地服务器
 python3 -m http.server 8000
 
-# 或使用 Python 2
-python -m SimpleHTTPServer 8000
+# 访问 http://localhost:8000
 ```
-
-3. 在浏览器中访问 `http://localhost:8000`
 
 ### 部署到 GitHub Pages
 
-1. 将代码推送到 GitHub 仓库
-2. 进入仓库的 Settings → Pages
-3. 在 Source 下选择 `main` 分支
-4. 点击 Save，等待部署完成
-5. 访问 `https://your-username.github.io/your-repo`
+1. 推送代码到 GitHub
+2. 在仓库 Settings → Pages 中启用 GitHub Pages
+3. 选择 `main` 分支，`/ (root)` 目录
+4. 访问 `https://vonfre.github.io/`
 
 ## 📝 添加新文章
 
-### 方法一：修改 JavaScript 数据
+### 三步添加文章
 
-编辑 `script.js` 文件中的 `blogPosts` 数组，添加新文章信息：
+#### 1. 创建 Markdown 文件
+
+在对应模块目录下创建 `.md` 文件：
+
+```bash
+posts/basics/your-article.md          # 基础学习
+posts/reproduction/your-article.md    # 代码复现
+posts/tools/your-article.md           # 实用工具
+posts/literature/your-article.md      # 文献精读
+```
+
+#### 2. 编写内容
+
+使用标准 Markdown 语法：
+
+```markdown
+# 文章标题
+
+文章内容...
+
+## 代码示例
+
+\`\`\`python
+def hello():
+    print("Hello, World!")
+\`\`\`
+
+## 数学公式
+
+$$
+E = mc^2
+$$
+```
+
+#### 3. 更新配置
+
+编辑 `config.js`，添加文章信息：
 
 ```javascript
-{
-    id: 7,
-    title: '你的文章标题',
-    excerpt: '文章摘要...',
-    category: 'tech', // tech, bioinformatics, tutorial
-    categoryName: '技术',
-    date: '2026-01-12',
-    link: 'posts/your-post.html'
-}
+const ARTICLES = {
+    basics: [
+        {
+            id: 'your-article',
+            title: '你的文章标题',
+            path: 'posts/basics/your-article.md',
+            date: '2026-01-12',
+            description: '文章简短描述'
+        }
+    ]
+};
 ```
 
-### 方法二：创建新文章页面
+### 推送到 GitHub
 
-1. 在 `posts/` 目录下创建新的 HTML 文件
-2. 复制现有文章模板（如 `javascript-async.html`）
-3. 修改文章内容、标题和元信息
-4. 在 `script.js` 中添加文章数据
-
-## 🎨 自定义样式
-
-### 修改颜色主题
-
-编辑 `styles.css` 中的 CSS 变量：
-
-```css
-:root {
-    --color-primary: hsl(250, 84%, 54%);
-    --color-secondary: hsl(340, 82%, 52%);
-    /* 修改其他颜色变量 */
-}
-```
-
-### 修改字体
-
-在 `index.html` 和文章页面的 `<head>` 中修改 Google Fonts 链接：
-
-```html
-<link href="https://fonts.googleapis.com/css2?family=Your+Font&display=swap" rel="stylesheet">
-```
-
-然后在 `styles.css` 中更新字体变量：
-
-```css
-:root {
-    --font-sans: 'Your Font', sans-serif;
-}
+```bash
+git add .
+git commit -m "Add new article"
+git push origin main
 ```
 
 ## 📁 项目结构
 
 ```
 .
-├── index.html          # 主页
+├── index.html          # 主页面
 ├── styles.css          # 样式文件
-├── script.js           # JavaScript 逻辑
-├── posts/              # 博客文章目录
-│   ├── javascript-async.html
-│   ├── sequence-alignment.html
-│   └── css-grid-tutorial.html
-└── README.md           # 项目说明
+├── app.js              # 应用逻辑
+├── config.js           # 文章配置
+├── README.md           # 项目说明
+└── posts/              # Markdown 文章
+    ├── basics/         # 基础学习
+    ├── reproduction/   # 代码复现
+    ├── tools/          # 实用工具
+    └── literature/     # 文献精读
+```
+
+## 🎨 Markdown 语法
+
+### 代码块
+
+````markdown
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+```
+````
+
+### LaTeX 公式
+
+```markdown
+# 行内公式
+这是行内公式 $E = mc^2$ 的示例。
+
+# 块级公式
+$$
+\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+```
+
+### 表格
+
+```markdown
+| 列1 | 列2 | 列3 |
+|-----|-----|-----|
+| 数据1 | 数据2 | 数据3 |
 ```
 
 ## 🛠️ 技术栈
 
-- **HTML5**: 语义化标记
-- **CSS3**: 现代样式和动画
-- **JavaScript**: 原生 ES6+
+- **HTML/CSS/JavaScript**: 核心技术
+- **Marked.js**: Markdown 渲染
+- **KaTeX**: LaTeX 数学公式
+- **Highlight.js**: 代码语法高亮
 - **Google Fonts**: Inter 和 JetBrains Mono
+
+## 🎯 模块分类
+
+- **📚 基础学习**: 编程语言、算法、数据结构
+- **🔬 代码复现**: 论文和模型的代码实现
+- **🛠️ 实用工具**: 开发工具、效率提升
+- **📖 文献精读**: 重要论文的深度解读
 
 ## 📄 许可证
 
-MIT License - 自由使用和修改
+MIT License
 
 ## 🤝 贡献
 
@@ -126,8 +172,8 @@ MIT License - 自由使用和修改
 
 ## 📧 联系方式
 
-- GitHub: [@your-username](https://github.com/your-username)
-- Email: your.email@example.com
+- GitHub: [@Vonfre](https://github.com/Vonfre)
+- Website: https://vonfre.github.io/
 
 ---
 
