@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="个人技术博客 - 分享编程、生物信息学和技术见解">
+    <meta name="keywords" content="博客,技术,编程,生物信息学">
+    <meta name="author" content="Zhang Huan">
+    <title>我的技术博客</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="logo">
+                    <span class="logo-icon">✦</span>
+                    <span class="logo-text">Tech Blog</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#home" class="nav-link active">首页</a>
+                    <a href="#posts" class="nav-link">文章</a>
+                    <a href="#about" class="nav-link">关于</a>
+                    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">欢迎来到我的博客</div>
+                <h1 class="hero-title">
+                    探索技术的
+                    <span class="gradient-text">无限可能</span>
+                </h1>
+                <p class="hero-description">
+                    分享编程技巧、生物信息学研究和技术见解。在这里记录学习历程，探讨前沿技术。
+                </p>
+                <div class="hero-actions">
+                    <a href="#posts" class="btn btn-primary">浏览文章</a>
+                    <a href="#about" class="btn btn-secondary">了解更多</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-bg"></div>
+    </section>
+
+    <!-- 文章列表 -->
+    <section class="posts-section" id="posts">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">最新文章</h2>
+                <p class="section-description">探索最新的技术文章和见解</p>
+            </div>
+
+            <!-- 分类筛选 -->
+            <div class="filter-bar">
+                <button class="filter-btn active" data-category="all">全部</button>
+                <button class="filter-btn" data-category="tech">技术</button>
+                <button class="filter-btn" data-category="bioinformatics">生物信息学</button>
+                <button class="filter-btn" data-category="tutorial">教程</button>
+            </div>
+
+            <!-- 搜索框 -->
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索文章..." class="search-input">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <!-- 文章网格 -->
+            <div class="posts-grid" id="postsGrid">
+                <!-- 文章卡片将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于区域 -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="section-title">关于博客</h2>
+                    <p class="about-description">
+                        这是一个专注于技术分享的个人博客，涵盖编程、生物信息学、数据科学等领域。
+                        我相信通过分享知识和经验，可以帮助更多人在技术道路上成长。
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="postCount">0</div>
+                            <div class="stat-label">文章</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">分类</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">可能性</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-card">
+                        <div class="visual-icon">💻</div>
+                        <h3>技术驱动</h3>
+                        <p>探索最新技术趋势</p>
+                    </div>
+                    <div class="visual-card">
+                        <div class="visual-icon">🧬</div>
+                        <h3>科学严谨</h3>
+                        <p>基于实践的深度分析</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">Tech Blog</h3>
+                    <p class="footer-text">分享知识，传递价值</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">首页</a></li>
+                        <li><a href="#posts">文章</a></li>
+                        <li><a href="#about">关于</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">联系方式</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com" target="_blank">GitHub</a></li>
+                        <li><a href="mailto:your.email@example.com">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tech Blog. All rights reserved.</p>
+                <p>Built with ❤️ and hosted on GitHub Pages</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

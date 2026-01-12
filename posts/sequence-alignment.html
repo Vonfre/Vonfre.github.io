@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="生物信息学中的序列比对算法">
+    <title>生物信息学中的序列比对算法 - Tech Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        .post-header {
+            padding: var(--spacing-3xl) 0 var(--spacing-xl);
+            text-align: center;
+            background: var(--color-bg-secondary);
+        }
+
+        .post-title-main {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .post-meta-info {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .post-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        .post-content h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text);
+        }
+
+        .post-content h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .post-content p {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+
+        .post-content code {
+            background: var(--color-bg-tertiary);
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--color-primary);
+        }
+
+        .post-content pre {
+            background: var(--color-bg-tertiary);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--color-text);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xl);
+            transition: gap var(--transition-fast);
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+
+        .algorithm-box {
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">✦</span>
+                    <span class="logo-text">Tech Blog</span>
+                </a>
+                <div class="nav-links">
+                    <a href="../index.html#home" class="nav-link">首页</a>
+                    <a href="../index.html#posts" class="nav-link">文章</a>
+                    <a href="../index.html#about" class="nav-link">关于</a>
+                    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头部 -->
+    <header class="post-header">
+        <div class="container">
+            <div class="post-meta-info">
+                <span class="post-category">生物信息学</span>
+                <span class="post-date">2026-01-08</span>
+            </div>
+            <h1 class="post-title-main">生物信息学中的序列比对算法</h1>
+        </div>
+    </header>
+
+    <!-- 文章内容 -->
+    <article class="post-content">
+        <a href="../index.html#posts" class="back-link">← 返回文章列表</a>
+
+        <h2>序列比对简介</h2>
+        <p>
+            序列比对是生物信息学中最基础也是最重要的技术之一。通过比对DNA、RNA或蛋白质序列，
+            我们可以推断序列之间的进化关系、预测功能区域、识别保守序列等。
+            本文将介绍几种经典的序列比对算法及其应用。
+        </p>
+
+        <h2>全局比对：Needleman-Wunsch 算法</h2>
+        <p>
+            Needleman-Wunsch 算法是一种动态规划算法，用于寻找两个序列的最优全局比对。
+            该算法由 Saul B. Needleman 和 Christian D. Wunsch 于1970年提出。
+        </p>
+
+        <div class="algorithm-box">
+            <h3>算法核心思想</h3>
+            <p>
+                使用动态规划矩阵，每个单元格 F(i,j) 表示序列1的前i个字符与序列2的前j个字符的最优比对得分。
+                递推公式为：
+            </p>
+            <pre><code>F(i,j) = max(
+    F(i-1,j-1) + s(xi, yj),  // 匹配/错配
+    F(i-1,j) + gap,          // 删除
+    F(i,j-1) + gap           // 插入
+)</code></pre>
+        </div>
+
+        <h3>Python 实现示例</h3>
+        <pre><code>def needleman_wunsch(seq1, seq2, match=1, mismatch=-1, gap=-1):
+    m, n = len(seq1), len(seq2)
+    # 初始化得分矩阵
+    score = [[0] * (n + 1) for _ in range(m + 1)]
+    
+    # 初始化第一行和第一列
+    for i in range(m + 1):
+        score[i][0] = gap * i
+    for j in range(n + 1):
+        score[0][j] = gap * j
+    
+    # 填充得分矩阵
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            match_score = match if seq1[i-1] == seq2[j-1] else mismatch
+            score[i][j] = max(
+                score[i-1][j-1] + match_score,
+                score[i-1][j] + gap,
+                score[i][j-1] + gap
+            )
+    
+    return score[m][n]</code></pre>
+
+        <h2>局部比对：Smith-Waterman 算法</h2>
+        <p>
+            Smith-Waterman 算法是 Needleman-Wunsch 算法的变体，用于寻找两个序列之间的最优局部比对。
+            这在寻找保守区域或功能域时特别有用。
+        </p>
+
+        <div class="algorithm-box">
+            <h3>与全局比对的区别</h3>
+            <p>
+                Smith-Waterman 算法的主要区别在于：
+            </p>
+            <ul style="color: var(--color-text-secondary); line-height: 1.8;">
+                <li>得分矩阵中的负值被设为0</li>
+                <li>回溯从矩阵中的最高分开始，到0结束</li>
+                <li>允许比对在序列的任意位置开始和结束</li>
+            </ul>
+        </div>
+
+        <h2>快速比对：BLAST</h2>
+        <p>
+            虽然动态规划算法能找到最优解，但时间复杂度为 O(mn)，对于大规模序列数据库搜索来说太慢。
+            BLAST (Basic Local Alignment Search Tool) 使用启发式方法，在保证较高准确性的同时大幅提升速度。
+        </p>
+
+        <h3>BLAST 的核心策略</h3>
+        <p>
+            BLAST 通过以下步骤加速比对过程：
+        </p>
+        <ol style="color: var(--color-text-secondary); line-height: 1.8; margin-left: 1.5rem;">
+            <li>将查询序列分解为短的"种子"（通常为3个氨基酸或11个核苷酸）</li>
+            <li>在数据库中快速查找这些种子的精确匹配或高分匹配</li>
+            <li>对找到的匹配进行扩展</li>
+            <li>对高分扩展使用更精确的比对算法</li>
+        </ol>
+
+        <h2>应用场景</h2>
+        <p>
+            不同的序列比对算法适用于不同的场景：
+        </p>
+        <ul
+            style="color: var(--color-text-secondary); line-height: 1.8; margin-left: 1.5rem; margin-bottom: var(--spacing-md);">
+            <li><strong>Needleman-Wunsch</strong>: 比对长度相近的同源序列</li>
+            <li><strong>Smith-Waterman</strong>: 寻找保守功能域或motif</li>
+            <li><strong>BLAST</strong>: 大规模数据库搜索，寻找同源序列</li>
+        </ul>
+
+        <h2>总结</h2>
+        <p>
+            序列比对算法是生物信息学的基石。从经典的动态规划算法到现代的启发式方法，
+            这些算法帮助我们理解生命的奥秘。掌握这些算法的原理和应用，
+            对于从事生物信息学研究和开发至关重要。
+        </p>
+
+        <a href="../index.html#posts" class="back-link">← 返回文章列表</a>
+    </article>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tech Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        });
+    </script>
+</body>
+
+</html>

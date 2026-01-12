@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="JavaScript 异步编程完全指南">
+    <title>JavaScript 异步编程完全指南 - Tech Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        .post-header {
+            padding: var(--spacing-3xl) 0 var(--spacing-xl);
+            text-align: center;
+            background: var(--color-bg-secondary);
+        }
+
+        .post-title-main {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .post-meta-info {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .post-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        .post-content h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text);
+        }
+
+        .post-content h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .post-content p {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+
+        .post-content code {
+            background: var(--color-bg-tertiary);
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--color-primary);
+        }
+
+        .post-content pre {
+            background: var(--color-bg-tertiary);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--color-text);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xl);
+            transition: gap var(--transition-fast);
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">✦</span>
+                    <span class="logo-text">Tech Blog</span>
+                </a>
+                <div class="nav-links">
+                    <a href="../index.html#home" class="nav-link">首页</a>
+                    <a href="../index.html#posts" class="nav-link">文章</a>
+                    <a href="../index.html#about" class="nav-link">关于</a>
+                    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头部 -->
+    <header class="post-header">
+        <div class="container">
+            <div class="post-meta-info">
+                <span class="post-category">技术</span>
+                <span class="post-date">2026-01-10</span>
+            </div>
+            <h1 class="post-title-main">JavaScript 异步编程完全指南</h1>
+        </div>
+    </header>
+
+    <!-- 文章内容 -->
+    <article class="post-content">
+        <a href="../index.html#posts" class="back-link">← 返回文章列表</a>
+
+        <h2>引言</h2>
+        <p>
+            JavaScript 的异步编程是现代 Web 开发中最重要的概念之一。从最早的回调函数，到 Promise，再到现在的 async/await，
+            JavaScript 的异步编程模式经历了巨大的演变。本文将深入探讨这些概念，帮助你掌握异步编程的精髓。
+        </p>
+
+        <h2>回调函数（Callbacks）</h2>
+        <p>
+            回调函数是 JavaScript 中最基础的异步编程模式。它允许我们在某个操作完成后执行特定的代码。
+        </p>
+        <pre><code>function fetchData(callback) {
+    setTimeout(() => {
+        const data = { name: 'John', age: 30 };
+        callback(data);
+    }, 1000);
+}
+
+fetchData((data) => {
+    console.log('数据获取成功:', data);
+});</code></pre>
+
+        <h3>回调地狱</h3>
+        <p>
+            当多个异步操作需要按顺序执行时，回调函数会导致代码嵌套层次过深，形成所谓的"回调地狱"（Callback Hell）。
+        </p>
+
+        <h2>Promise</h2>
+        <p>
+            Promise 是 ES6 引入的异步编程解决方案，它提供了更优雅的方式来处理异步操作。
+            Promise 有三种状态：pending（进行中）、fulfilled（已成功）和 rejected（已失败）。
+        </p>
+        <pre><code>function fetchData() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const data = { name: 'John', age: 30 };
+            resolve(data);
+        }, 1000);
+    });
+}
+
+fetchData()
+    .then(data => console.log('数据获取成功:', data))
+    .catch(error => console.error('错误:', error));</code></pre>
+
+        <h2>Async/Await</h2>
+        <p>
+            async/await 是 ES2017 引入的语法糖，它让异步代码看起来像同步代码，大大提高了代码的可读性。
+        </p>
+        <pre><code>async function getData() {
+    try {
+        const data = await fetchData();
+        console.log('数据获取成功:', data);
+    } catch (error) {
+        console.error('错误:', error);
+    }
+}
+
+getData();</code></pre>
+
+        <h2>最佳实践</h2>
+        <p>
+            在实际开发中，建议优先使用 async/await，它提供了最清晰的代码结构。同时要注意错误处理，
+            使用 try/catch 捕获异步操作中的错误。对于并行执行的异步操作，可以使用 <code>Promise.all()</code> 来提高性能。
+        </p>
+
+        <h2>总结</h2>
+        <p>
+            掌握 JavaScript 的异步编程是成为优秀前端开发者的必经之路。从回调函数到 Promise，再到 async/await，
+            每一次演进都让异步代码变得更加优雅和易于维护。希望本文能帮助你更好地理解和应用这些概念。
+        </p>
+
+        <a href="../index.html#posts" class="back-link">← 返回文章列表</a>
+    </article>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tech Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        });
+    </script>
+</body>
+
+</html>

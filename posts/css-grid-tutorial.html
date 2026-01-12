@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CSS Grid 布局实战教程">
+    <title>CSS Grid 布局实战教程 - Tech Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        .post-header {
+            padding: var(--spacing-3xl) 0 var(--spacing-xl);
+            text-align: center;
+            background: var(--color-bg-secondary);
+        }
+
+        .post-title-main {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .post-meta-info {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .post-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        .post-content h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text);
+        }
+
+        .post-content h3 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .post-content p {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+
+        .post-content code {
+            background: var(--color-bg-tertiary);
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--color-primary);
+        }
+
+        .post-content pre {
+            background: var(--color-bg-tertiary);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--color-text);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xl);
+            transition: gap var(--transition-fast);
+        }
+
+        .back-link:hover {
+            gap: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">✦</span>
+                    <span class="logo-text">Tech Blog</span>
+                </a>
+                <div class="nav-links">
+                    <a href="../index.html#home" class="nav-link">首页</a>
+                    <a href="../index.html#posts" class="nav-link">文章</a>
+                    <a href="../index.html#about" class="nav-link">关于</a>
+                    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头部 -->
+    <header class="post-header">
+        <div class="container">
+            <div class="post-meta-info">
+                <span class="post-category">教程</span>
+                <span class="post-date">2026-01-05</span>
+            </div>
+            <h1 class="post-title-main">CSS Grid 布局实战教程</h1>
+        </div>
+    </header>
+
+    <!-- 文章内容 -->
+    <article class="post-content">
+        <a href="../index.html#posts" class="back-link">← 返回文章列表</a>
+
+        <h2>什么是 CSS Grid？</h2>
+        <p>
+            CSS Grid 是一个二维布局系统，允许我们同时在行和列两个维度上控制元素的位置和大小。
+            相比传统的浮动和定位方法，Grid 提供了更强大、更灵活的布局能力。
+        </p>
+
+        <h2>基础概念</h2>
+        <h3>Grid 容器和 Grid 项目</h3>
+        <p>
+            要使用 Grid 布局，首先需要定义一个 Grid 容器。容器内的直接子元素自动成为 Grid 项目。
+        </p>
+        <pre><code>.container {
+    display: grid;
+}</code></pre>
+
+        <h3>定义网格轨道</h3>
+        <p>
+            使用 <code>grid-template-columns</code> 和 <code>grid-template-rows</code> 定义列和行的大小。
+        </p>
+        <pre><code>.container {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 100px 100px;
+    gap: 20px;
+}</code></pre>
+
+        <h2>实用技巧</h2>
+        <h3>1. 使用 fr 单位</h3>
+        <p>
+            <code>fr</code> 单位代表"分数"（fraction），可以创建灵活的网格轨道。
+        </p>
+        <pre><code>.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    /* 第二列是第一列和第三列的两倍宽 */
+}</code></pre>
+
+        <h3>2. repeat() 函数</h3>
+        <p>
+            当需要创建多个相同大小的轨道时，<code>repeat()</code> 函数可以简化代码。
+        </p>
+        <pre><code>.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 等同于: 1fr 1fr 1fr */
+}</code></pre>
+
+        <h3>3. 自动填充和自适应</h3>
+        <p>
+            使用 <code>auto-fit</code> 或 <code>auto-fill</code> 创建响应式网格。
+        </p>
+        <pre><code>.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}</code></pre>
+
+        <h2>Grid 项目定位</h2>
+        <h3>使用网格线</h3>
+        <p>
+            可以通过指定网格线来精确控制项目的位置和跨度。
+        </p>
+        <pre><code>.item {
+    grid-column: 1 / 3;  /* 从第1列线到第3列线 */
+    grid-row: 1 / 2;     /* 从第1行线到第2行线 */
+}</code></pre>
+
+        <h3>使用 span 关键字</h3>
+        <p>
+            <code>span</code> 关键字可以指定项目跨越的轨道数量。
+        </p>
+        <pre><code>.item {
+    grid-column: span 2;  /* 跨越2列 */
+    grid-row: span 1;     /* 跨越1行 */
+}</code></pre>
+
+        <h2>实战案例：响应式卡片布局</h2>
+        <p>
+            下面是一个实用的响应式卡片布局示例，展示了 Grid 的强大功能。
+        </p>
+        <pre><code>.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    padding: 24px;
+}
+
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 让第一个卡片占据两列 */
+.card:first-child {
+    grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    .card:first-child {
+        grid-column: span 1;
+    }
+}</code></pre>
+
+        <h2>Grid vs Flexbox</h2>
+        <p>
+            Grid 和 Flexbox 各有优势，选择使用哪个取决于具体场景：
+        </p>
+        <ul
+            style="color: var(--color-text-secondary); line-height: 1.8; margin-left: 1.5rem; margin-bottom: var(--spacing-md);">
+            <li><strong>使用 Grid</strong>: 需要同时控制行和列的二维布局</li>
+            <li><strong>使用 Flexbox</strong>: 一维布局（单行或单列）</li>
+            <li><strong>组合使用</strong>: Grid 用于整体布局，Flexbox 用于组件内部</li>
+        </ul>
+
+        <h2>总结</h2>
+        <p>
+            CSS Grid 是现代网页布局的强大工具。通过掌握 Grid 的核心概念和技巧，
+            你可以创建出复杂而优雅的布局，同时保持代码的简洁和可维护性。
+            建议在实际项目中多加练习，逐步熟悉 Grid 的各种特性。
+        </p>
+
+        <a href="../index.html#posts" class="back-link">← 返回文章列表</a>
+    </article>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Tech Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.querySelector('.theme-icon');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        themeIcon.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        });
+    </script>
+</body>
+
+</html>
