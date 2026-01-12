@@ -1,12 +1,16 @@
 // ==================== 全局状态 ====================
 let currentArticle = null;
 let currentTheme = localStorage.getItem('theme') || 'light';
+let collapsedSections = JSON.parse(localStorage.getItem('collapsedSections') || '{}');
+let tocItems = [];
 
 // ==================== 初始化 ====================
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initNavigation();
     initMobileMenu();
+    initCollapsibleSections();
+    initScrollTopBtn();
     handleRouting();
 
     // 监听 URL 变化
@@ -62,6 +66,28 @@ function initNavigation() {
     });
 }
 
+// ==================== 侧边栏折叠功能 ====================
+function initCollapsibleSections() {
+    const sectionHeaders = document.querySelectorAll('.nav-section-header');
+
+    sectionHeaders.forEach(header => {
+        const sectionName = header.dataset.section;
+        const section = header.closest('.nav-section');
+        const navItems = section.querySelector('.nav-items');
+
+        // 恢复保存的折叠状态
+        if (collapsedSections[sectionName]) {
+            section.classList.add('collapsed');
+        }
+
+        header.addEventListener('click', () => {
+            section.classList.toggle('collapsed');
+            collapsedSections[sectionName] = section.classList.contains('collapsed');
+            localStorage.setItem('collapsedSections', JSON.stringify(collapsedSections));
+        });
+    });
+}
+
 // ==================== 移动端菜单 ====================
 function initMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -81,12 +107,34 @@ function initMobileMenu() {
     });
 }
 
+// ==================== 滚动到顶部按钮 ====================
+function initScrollTopBtn() {
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    const mainContent = document.querySelector('.main-content');
+
+    mainContent.addEventListener('scroll', () => {
+        if (mainContent.scrollTop > 300) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+
+        // 更新TOC高亮
+        updateTOCHighlight();
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
 // ==================== 路由处理 ====================
 function handleRouting() {
-    const hash = window.location.hash.slice(1); // 移除 #
+    const hash = window.location.hash.slice(1);
 
     if (!hash || hash === 'home') {
         loadHomePage();
+        hideTOC();
         return;
     }
 
@@ -94,8 +142,22 @@ function handleRouting() {
 
     if (category && articleId) {
         loadArticle(category, articleId);
+        // 展开对应的分类
+        expandSection(category);
     } else {
         loadHomePage();
+        hideTOC();
+    }
+}
+
+// ==================== 展开指定分类 ====================
+function expandSection(category) {
+    const section = document.querySelector(`[data-section="${category}"]`);
+    if (section) {
+        const navSection = section.closest('.nav-section');
+        navSection.classList.remove('collapsed');
+        collapsedSections[category] = false;
+        localStorage.setItem('collapsedSections', JSON.stringify(collapsedSections));
     }
 }
 
@@ -177,6 +239,7 @@ async function loadArticle(category, articleId) {
 
     if (!article) {
         contentWrapper.innerHTML = '<div class="error">文章未找到</div>';
+        hideTOC();
         return;
     }
 
@@ -236,8 +299,15 @@ async function loadArticle(category, articleId) {
             throwOnError: false
         });
 
+        // 添加代码块折叠和复制功能
+        enhanceCodeBlocks();
+
+        // 生成并显示TOC
+        generateTOC();
+        showTOC();
+
         // 滚动到顶部
-        contentWrapper.scrollTop = 0;
+        document.querySelector('.main-content').scrollTop = 0;
 
     } catch (error) {
         console.error('加载文章失败:', error);
@@ -249,5 +319,176 @@ async function loadArticle(category, articleId) {
                 <a href="#home" class="btn-back">返回首页</a>
             </div>
         `;
+        hideTOC();
     }
+}
+
+// ==================== 生成文章目录 ====================
+function generateTOC() {
+    const markdownBody = document.querySelector('.markdown-body');
+    if (!markdownBody) return;
+
+    const headings = markdownBody.querySelectorAll('h2, h3');
+    tocItems = [];
+
+    headings.forEach((heading, index) => {
+        const id = `heading-${index}`;
+        heading.id = id;
+
+        tocItems.push({
+            id: id,
+            text: heading.textContent,
+            level: parseInt(heading.tagName.substring(1)),
+            element: heading
+        });
+    });
+
+    // 渲染TOC
+    const tocNav = document.getElementById('tocNav');
+    if (tocItems.length === 0) {
+        tocNav.innerHTML = '<p class="toc-empty">本文暂无目录</p>';
+        return;
+    }
+
+    let tocHtml = '<ul class="toc-list">';
+    tocItems.forEach(item => {
+        const className = item.level === 2 ? 'toc-item' : 'toc-item toc-item-sub';
+        tocHtml += `
+            <li class="${className}">
+                <a href="#${item.id}" class="toc-link" data-target="${item.id}">
+                    ${item.text}
+                </a>
+            </li>
+        `;
+    });
+    tocHtml += '</ul>';
+
+    tocNav.innerHTML = tocHtml;
+
+    // TOC点击事件
+    tocNav.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.dataset.target;
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                const mainContent = document.querySelector('.main-content');
+                const offsetTop = targetElement.offsetTop - 80;
+                mainContent.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            }
+        });
+    });
+}
+
+// ==================== 更新TOC高亮 ====================
+function updateTOCHighlight() {
+    if (tocItems.length === 0) return;
+
+    const mainContent = document.querySelector('.main-content');
+    const scrollTop = mainContent.scrollTop;
+
+    let currentIndex = 0;
+    for (let i = 0; i < tocItems.length; i++) {
+        const heading = tocItems[i].element;
+        if (heading.offsetTop - 100 <= scrollTop) {
+            currentIndex = i;
+        } else {
+            break;
+        }
+    }
+
+    // 更新TOC激活状态
+    document.querySelectorAll('.toc-link').forEach((link, index) => {
+        if (index === currentIndex) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+// ==================== 显示/隐藏TOC ====================
+function showTOC() {
+    const tocSidebar = document.getElementById('tocSidebar');
+    tocSidebar.classList.add('visible');
+
+    // TOC切换按钮
+    const tocToggle = document.getElementById('tocToggle');
+    tocToggle.onclick = () => {
+        tocSidebar.classList.toggle('collapsed');
+    };
+}
+
+function hideTOC() {
+    const tocSidebar = document.getElementById('tocSidebar');
+    tocSidebar.classList.remove('visible');
+    tocItems = [];
+}
+
+// ==================== 增强代码块 ====================
+function enhanceCodeBlocks() {
+    const codeBlocks = document.querySelectorAll('.markdown-body pre code');
+
+    codeBlocks.forEach((code, index) => {
+        const pre = code.parentElement;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+
+        // 获取语言
+        const language = [...code.classList].find(cls => cls.startsWith('language-'))?.replace('language-', '') || 'text';
+
+        // 获取代码行数
+        const lines = code.textContent.split('\n').length;
+
+        // 创建工具栏
+        const toolbar = document.createElement('div');
+        toolbar.className = 'code-toolbar';
+        toolbar.innerHTML = `
+            <span class="code-language">${language}</span>
+            <div class="code-actions">
+                <button class="code-copy-btn" data-code-index="${index}" title="复制代码">
+                    <span class="copy-icon">📋</span>
+                </button>
+                ${lines > 15 ? `<button class="code-collapse-btn" data-collapsed="true" title="展开/折叠">
+                    <span class="collapse-text">展开</span>
+                </button>` : ''}
+            </div>
+        `;
+
+        // 包装代码块
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(toolbar);
+        wrapper.appendChild(pre);
+
+        // 如果代码行数多，默认折叠
+        if (lines > 15) {
+            wrapper.classList.add('collapsed');
+        }
+    });
+
+    // 复制按钮事件
+    document.querySelectorAll('.code-copy-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const wrapper = btn.closest('.code-block-wrapper');
+            const code = wrapper.querySelector('code').textContent;
+
+            try {
+                await navigator.clipboard.writeText(code);
+                const icon = btn.querySelector('.copy-icon');
+                icon.textContent = '✓';
+                setTimeout(() => icon.textContent = '📋', 2000);
+            } catch (err) {
+                console.error('复制失败:', err);
+            }
+        });
+    });
+
+    // 折叠按钮事件
+    document.querySelectorAll('.code-collapse-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const wrapper = btn.closest('.code-block-wrapper');
+            const isCollapsed = wrapper.classList.toggle('collapsed');
+            btn.querySelector('.collapse-text').textContent = isCollapsed ? '展开' : '折叠';
+        });
+    });
 }

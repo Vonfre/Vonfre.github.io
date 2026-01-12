@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
 
     <!-- 代码高亮 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js"></script>
 
     <!-- LaTeX 数学公式 -->
@@ -50,33 +50,49 @@
                 </div>
 
                 <!-- 基础学习 -->
-                <div class="nav-section">
-                    <div class="nav-section-title">基础学习</div>
+                <div class="nav-section collapsible">
+                    <div class="nav-section-header" data-section="basics">
+                        <span class="section-icon">📚</span>
+                        <span class="nav-section-title">基础学习</span>
+                        <span class="collapse-icon">▼</span>
+                    </div>
                     <div class="nav-items" id="nav-basics"></div>
                 </div>
 
                 <!-- 代码复现 -->
-                <div class="nav-section">
-                    <div class="nav-section-title">代码复现</div>
+                <div class="nav-section collapsible">
+                    <div class="nav-section-header" data-section="reproduction">
+                        <span class="section-icon">🔬</span>
+                        <span class="nav-section-title">代码复现</span>
+                        <span class="collapse-icon">▼</span>
+                    </div>
                     <div class="nav-items" id="nav-reproduction"></div>
                 </div>
 
                 <!-- 实用工具 -->
-                <div class="nav-section">
-                    <div class="nav-section-title">实用工具</div>
+                <div class="nav-section collapsible">
+                    <div class="nav-section-header" data-section="tools">
+                        <span class="section-icon">🛠️</span>
+                        <span class="nav-section-title">实用工具</span>
+                        <span class="collapse-icon">▼</span>
+                    </div>
                     <div class="nav-items" id="nav-tools"></div>
                 </div>
 
                 <!-- 文献精读 -->
-                <div class="nav-section">
-                    <div class="nav-section-title">文献精读</div>
+                <div class="nav-section collapsible">
+                    <div class="nav-section-header" data-section="literature">
+                        <span class="section-icon">📖</span>
+                        <span class="nav-section-title">文献精读</span>
+                        <span class="collapse-icon">▼</span>
+                    </div>
                     <div class="nav-items" id="nav-literature"></div>
                 </div>
             </nav>
 
             <div class="sidebar-footer">
                 <a href="https://github.com/Vonfre" target="_blank" class="footer-link">
-                    GitHub
+                    <span class="footer-icon">🔗</span> GitHub
                 </a>
             </div>
         </aside>
@@ -90,10 +106,28 @@
 
         <!-- 主内容区 -->
         <main class="main-content">
+            <!-- 文章目录（TOC） -->
+            <aside class="toc-sidebar" id="tocSidebar">
+                <div class="toc-header">
+                    <h3 class="toc-title">目录</h3>
+                    <button class="toc-toggle" id="tocToggle" aria-label="切换目录">
+                        <span>✕</span>
+                    </button>
+                </div>
+                <nav class="toc-nav" id="tocNav">
+                    <!-- 目录将动态生成 -->
+                </nav>
+            </aside>
+
             <div class="content-wrapper" id="contentWrapper">
                 <!-- 内容将通过 JavaScript 动态加载 -->
                 <div class="loading">加载中...</div>
             </div>
+
+            <!-- 滚动到顶部按钮 -->
+            <button class="scroll-top-btn" id="scrollTopBtn" aria-label="返回顶部">
+                <span>↑</span>
+            </button>
         </main>
     </div>
 
